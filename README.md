@@ -1,12 +1,12 @@
 # EBI_DLemulator
-Implementation of Deep Residual Neural Network from the paper “Emulation of an atmospheric gas-phase chemistry solver through deep learning” in Keras  
-Deep learning emulator is used for replacing and accelerating the gas-phase chemistry solution procedure in the chemical transport models  
+Deep Residual Regression Neural Network from the paper “Emulation of an atmospheric gas-phase chemistry solver through deep learning” in Keras is built for replacing and accelerating the gas-phase chemistry solution procedure in the chemical transport models  
  
-
+## Data
+A state-of-the-art open-source CTM version of the Community Multiscale Air Quality (CMAQ) model (https://github.com/USEPA/CMAQ/tree/5.2) is selected to derive the training and validation data for the emulator of the gas chemistry solver.
 
 
 ## Requirements
-*Tensorflow  
-*Keras  
-*Numpy  
++ Tensorflow  
++ Keras  
++ Numpy  
 
