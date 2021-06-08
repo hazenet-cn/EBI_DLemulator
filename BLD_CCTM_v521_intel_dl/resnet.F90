@@ -50,42 +50,41 @@
       ierror = import_py(np, "numpy")
       
       ierror = tuple_create(args, 1)
-	  ierror = args%setitem(0, "/lustre/home/acct-esehazenet/hazenet-pg3/CMAQv5.2.1AIr/data/python/dl/X_train_min.npy")
-	  ierror = call_py(X_train_min, np, "load", args)
-	  ierror = cast(X_train_min_nd, X_train_min)
-	  ierror = X_train_min_nd%get_data(X_train_minf)
-	 
-	  ierror = tuple_create(args, 1)
-	  ierror = args%setitem(0, "/lustre/home/acct-esehazenet/hazenet-pg3/CMAQv5.2.1AIr/data/python/dl/X_train_max.npy")
-	  ierror = call_py(X_train_max, np, "load", args)
-	  ierror = cast(X_train_max_nd, X_train_max)
-	  ierror = X_train_max_nd%get_data(X_train_maxf)
+      ierror = args%setitem(0, "X_train_min.npy")
+      ierror = call_py(X_train_min, np, "load", args)
+      ierror = cast(X_train_min_nd, X_train_min)
+      ierror = X_train_min_nd%get_data(X_train_minf)
+      ierror = tuple_create(args, 1)
+      ierror = args%setitem(0, "X_train_max.npy")
+      ierror = call_py(X_train_max, np, "load", args)
+      ierror = cast(X_train_max_nd, X_train_max)
+      ierror = X_train_max_nd%get_data(X_train_maxf)
       
       ierror = tuple_create(args, 1)
-      ierror = args%setitem(0, "/lustre/home/acct-esehazenet/hazenet-pg3/CMAQv5.2.1AIr/data/python/dl/Y_train_min.npy")
+      ierror = args%setitem(0, 'Y_train_min.npy")
       ierror = call_py(Y_train_min, np, "load", args)
       ierror = cast(Y_train_min_nd, Y_train_min)
       ierror = Y_train_min_nd%get_data(Y_train_minf)
 
       ierror = tuple_create(args, 1)
-      ierror = args%setitem(0, "/lustre/home/acct-esehazenet/hazenet-pg3/CMAQv5.2.1AIr/data/python/dl/Y_train_max.npy")
+      ierror = args%setitem(0, "Y_train_max.npy")
       ierror = call_py(Y_train_max, np, "load", args)
       ierror = cast(Y_train_max_nd, Y_train_max)
       ierror = Y_train_max_nd%get_data(Y_train_maxf)
       
       ierror = tuple_create(args, 1)
-      ierror = args%setitem(0, "/lustre/home/acct-esehazenet/hazenet-pg3/CMAQv5.2.1AIr/data/python/dl/Y_train_min_d.npy")
+      ierror = args%setitem(0, "Y_train_min_d.npy")
       ierror = call_py(Y_train_min_d, np, "load", args)
       ierror = cast(Y_train_min_d_nd, Y_train_min_d)
       ierror = Y_train_min_d_nd%get_data(Y_train_min_df)
 
       ierror = tuple_create(args, 1)
-      ierror = args%setitem(0, "/lustre/home/acct-esehazenet/hazenet-pg3/CMAQv5.2.1AIr/data/python/dl/Y_train_max_d.npy")
+      ierror = args%setitem(0, "Y_train_max_d.npy")
       ierror = call_py(Y_train_max_d, np, "load", args)
       ierror = cast(Y_train_max_d_nd, Y_train_max_d)
       ierror = Y_train_max_d_nd%get_data(Y_train_max_df)
       
-      XMSG = 'Loaded numpy data'
+      XMSG = 'Success: load numpy data '
       WRITE( LOGDEV, *) XMSG
          
       xrow = size(python_in, 1) 
@@ -98,8 +97,7 @@
           XMSG = 'Failure allocating python_std'
           WRITE( LOGDEV, *) XMSG
       END IF
-      XMSG = 'at 87'
-      WRITE( LOGDEV, *) XMSG
+
 
       do j = 1, xcol
           do i = 1, xrow
@@ -109,19 +107,15 @@
                   python_std(i,j) = X_train_minf(j)
               end if
           end do     
-	  end do
+      end do
       
-      ierror = ndarray_create(python_nd, python_std)
-      XMSG = 'at 108'
-      WRITE( LOGDEV, *) XMSG
-      !WRITE( LOGDEV, *) python_std(1,:)
-      
+      ierror = ndarray_create(python_nd, python_std)     
       ierror = import_py(k, "keras.models")
       ierror = tuple_create(args, 1)
-      ierror = args%setitem(0, "/lustre/home/acct-esehazenet/hazenet-pg3/CMAQv5.2.1AIr/data/python/dl/resnet.h5")
+      ierror = args%setitem(0, "resnet.h5")
       ierror = call_py(model, k, "load_model", args)
      
-      XMSG = 'end load model'
+      XMSG = 'Success: load model '
       WRITE( LOGDEV, *) XMSG
       
       
@@ -137,7 +131,7 @@
       ierror = cast(predict_results_std_nd, predict_results_std)
       ierror = predict_results_std_nd%get_data(predict_results_stdf, order='C')     
           
-      XMSG = 'get predict_result'
+      XMSG = 'Get predict results'
       WRITE( LOGDEV, *) XMSG
           
       xrow = size(predict_results_stdf, 2)
@@ -181,11 +175,11 @@
       call X_train_min%destroy
       call X_train_max%destroy
       call Y_train_min_d%destroy
-	  call Y_train_max_d%destroy      
+      call Y_train_max_d%destroy      
       call X_train_min_nd%destroy
       call X_train_max_nd%destroy 
       call Y_train_min_d_nd%destroy 
-	  call Y_train_max_d_nd%destroy      
+      call Y_train_max_d_nd%destroy      
       call python_nd%destroy
       call predict_results_std%destroy
       call predict_results_std_nd%destroy
