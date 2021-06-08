@@ -4,8 +4,8 @@
  FC = mpiifort
  CC = icc
 
- LIB = /lustre/home/acct-esehazenet/hazenet-pg3/CMAQv5.2.1AIr/lib/x86_64/intel
- PLIB = /lustre/home/acct-esehazenet/hazenet-pg3/.conda/envs/lcpy/
+ LIB = /CMAQv5.2.1/lib/x86_64/intel
+ PLIB = /your_python_evironment_path/
  include_path = -I $(LIB)/ioapi/modules/fixed_src \
                 -I $(LIB)/ioapi/include_files \
                 -I $(LIB)/mpi -I.
@@ -29,7 +29,7 @@
  LINKER     = $(FC)
  LINK_FLAGS = -qopenmp
 
- REPOROOT = /lustre/home/acct-esehazenet/hazenet-pg3/5.2.1/CCTM/src
+ REPOROOT = /CMAQv5.2.1/CCTM/src
 
  CPP = $(FC)
  CPP_FLAGS = \
