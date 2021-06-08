@@ -178,7 +178,7 @@
 !.. If you cannot get the data, you can delete the corresponding code and use only the maximum value of the training data   
       ierror = import_py(np, "numpy")     
       ierror = tuple_create(args, 1)
-      ierror = args%setitem(0, "/lustre/home/acct-esehazenet/hazenet-pg3/CMAQv5.2.1AIr/data/python/dl/y_max.npy")
+      ierror = args%setitem(0, "y_max.npy")
       ierror = call_py(ymax, np, "load", args)
       ierror = cast(ymax_nd, ymax)
       ierror = ymax_nd%get_data(ymaxf, order='C')     	
