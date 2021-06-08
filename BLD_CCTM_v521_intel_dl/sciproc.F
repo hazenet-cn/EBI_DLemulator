@@ -80,7 +80,7 @@ C Arguments:
 
 !     INTEGER      ASTEP( NLAYS )  ! layer advection time step
       INTEGER      ASTEP( : )      ! layer advection time step
-      integer :: time1, time2, p_begin, chem_begin, chem_end
+
 C Parameters:
 
 C External Functions:
@@ -198,7 +198,6 @@ C-----------------------------------------------------------------------
 
 C Synchronization Step Physical Processes Sequence
 
-      call system_clock(p_begin)
       CALL VDIFF ( CGRID, JDATE, JTIME, TSTEP )
       IF ( CKSUM ) CALL CKSUMMER ( 'VDIFF', CGRID, JDATE, JTIME )
       IF ( LIPR ) CALL PA_UPDATE ( 'VDIF', CGRID, JDATE, JTIME, TSTEP )
@@ -232,35 +231,23 @@ C decouple CGRID for cloud and chemistry
       CALL DECOUPLE_WRF ( CGRID, SDATE, STIME, TSTEP )
       IF ( CKSUM ) CALL CKSUMMER ( 'DECOUPLE_WRF', CGRID, JDATE, JTIME )
       
-      call system_clock(time1)
+
       CALL CLDPROC ( CGRID, JDATE, JTIME, TSTEP )
-      call system_clock(time2)
-      write(logdev,*) "cloud time: ", (real(time2)-real(time1))/10000
       IF ( CKSUM ) CALL CKSUMMER ( 'CLDPROC', CGRID, JDATE, JTIME )
       IF ( LIPR ) CALL PA_UPDATE ( 'CLDS', CGRID, JDATE, JTIME, TSTEP )
 	  
-      call system_clock(chem_begin)
       CALL CHEM_PY( CGRID, JDATE, JTIME, TSTEP )
-      call system_clock(chem_end)
       IF ( CKSUM ) CALL CKSUMMER ( 'CHEM_PY', CGRID, JDATE, JTIME )
-      IF ( LIPR ) CALL PA_UPDATE ( 'CHEM_PY', CGRID, JDATE, JTIME, TSTEP )
-      
-      write(logdev,*) chem_begin, chem_end
-      write(logdev,*) "chem time: ", (real(chem_end)-real(chem_begin))/10000
+      IF ( LIPR ) CALL PA_UPDATE ( 'CHEM_PY', CGRID, JDATE, JTIME, TSTEP )      
 
 #ifdef potvorto3
       CALL PVO3 ( CGRID, JDATE, JTIME )
       IF ( CKSUM ) CALL CKSUMMER ( 'PVO3', CGRID, JDATE, JTIME )
       IF ( LIPR ) CALL PA_UPDATE ( 'PVO3', CGRID, JDATE, JTIME, TSTEP )
-#endif
-      
-      call system_clock(time1)
+#endif 
       CALL AERO ( CGRID, JDATE, JTIME, TSTEP )
-      call system_clock(time2)
-      write(logdev,*) "aero time: ", (real(time2)-real(time1))/10000
       IF ( CKSUM ) CALL CKSUMMER ( 'AERO', CGRID, JDATE, JTIME )
       IF ( LIPR ) CALL PA_UPDATE ( 'AERO', CGRID, JDATE, JTIME, TSTEP )
-      write(logdev,*) "total time: ", (real(time2)-real(p_begin))/10000
       
       CALL NEXTIME ( JDATE, JTIME, TSTEP( 2 ) )
       WRITE( LOGDEV,'(/ 5X, A, I8, I7.6)' ) NMSG, JDATE, JTIME
