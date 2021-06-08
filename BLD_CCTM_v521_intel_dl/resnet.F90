@@ -14,7 +14,6 @@
       INTEGER       :: ALLOCSTAT
       LOGICAL, SAVE :: FIRSTIME = .TRUE.
       CHARACTER( 96 ) :: XMSG = ' '
-      integer :: time1, time2
       
       integer :: xcol, xrow, i, j
       type(module_py) :: np, k
@@ -123,11 +122,8 @@
       ierror = args%setitem(0, python_nd)
       ierror = dict_create(kwargs)
       ierror = kwargs%setitem("batch_size", 4096)
-      
-      call system_clock(time1)      
+       
       ierror = call_py(predict_results_std, model, "predict", args, kwargs)    
-      call system_clock(time2)
-      write(logdev,*) "predict time: ", (real(time2)-real(time1))/10000
       ierror = cast(predict_results_std_nd, predict_results_std)
       ierror = predict_results_std_nd%get_data(predict_results_stdf, order='C')     
           
