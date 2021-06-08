@@ -16,15 +16,13 @@
 !..Includes:
       INCLUDE SUBST_FILES_ID  ! CMAQ files
       INCLUDE SUBST_CONST     ! CMAQ constants
-
       INCLUDE SUBST_EMISPRM   ! Emissions processing control parameters
 
 !..Arguments:
       REAL, POINTER :: CGRID( :,:,:,: )  ! Species concentrations
       INTEGER JDATE           ! Current date (YYYYDDD)
       INTEGER JTIME           ! Current time (HHMMSS)
-      INTEGER TSTEP( 3 )      ! Time step vector (HHMMSS)
-      integer :: time1, time2      
+      INTEGER TSTEP( 3 )      ! Time step vector (HHMMSS)   
 
 !..for forpy:
       integer :: ierror
@@ -93,10 +91,6 @@
              CALL M3EXIT( PNAME, 0, 0, XMSG, XSTAT1 )
          END IF
          
-         !DO SPC = 1, NUMB_MECH_SPC
-            !WRITE( LOGDEV, * ) "First in chem_py", SPC, CHEMISTRY_SPC( SPC )
-         !END DO                      
-         
          ! get python array        
          DATA_NUM = MY_NCOLS * MY_NROWS * NLAYS
          VAR_NUM  = NUMB_MECH_SPC + MET_NUM 
@@ -126,7 +120,7 @@
 !cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       
       XMSG = 'Begin: chem_py'
-	  WRITE( LOGDEV, *) XMSG
+      WRITE( LOGDEV, *) XMSG
       
 !.. Get meterological variables     
       MIDDATE = JDATE
@@ -185,7 +179,7 @@
       y_max = ymaxf(:, STRTCOLMC3:ENDCOLMC3, STRTROWMC3:ENDROWMC3)
       
       XMSG = 'END: python data'
-	  WRITE( LOGDEV, *) XMSG
+      WRITE( LOGDEV, *) XMSG
       
       N = 0
       T = NUMB_MECH_SPC + 1
@@ -196,10 +190,10 @@
                DO V = 1, NUMB_MECH_SPC
                   S = CGRID_INDEX( V )				  
                   PYTHON_IN(N,V) = CGRID(C,R,L,S)                 
-				  IF ( ISNAN(PYTHON_IN(N,V))) THEN
-				     WRITE( LOGDEV, *) N, V
-                     XMSG = 'NAN ERROR HAPPEN, EXIT!'
-                     CALL M3EXIT ( PNAME, JDATE, JTIME, XMSG, XSTAT1 )
+		          IF ( ISNAN(PYTHON_IN(N,V))) THEN
+			      	WRITE( LOGDEV, *) N, V
+                    XMSG = 'NAN ERROR HAPPEN, EXIT!'
+                    CALL M3EXIT ( PNAME, JDATE, JTIME, XMSG, XSTAT1 )
 				  END IF
                END DO 
                PYTHON_IN(N,T)      = TA(C,R,L)
@@ -213,15 +207,12 @@
       END DO
 	  
       XMSG = 'Begin: dl'
-	  WRITE( LOGDEV, *) XMSG
-
-	  call system_clock(time1)
+      WRITE( LOGDEV, *) XMSG
+      
       CALL resnet(PYTHON_IN, PYTHON_OUT)    
-	  call system_clock(time2)
-      write(logdev,*) "dl time: ", (real(time2)-real(time1))/10000
       
       XMSG = 'End: dl'
-	  WRITE( LOGDEV, *) XMSG
+      WRITE( LOGDEV, *) XMSG
 	  
       N = 0
       DO L = 1, NLAYS
@@ -240,7 +231,7 @@
       END DO
 	  
       XMSG = 'End: chem_py'
-	  WRITE( LOGDEV, *) XMSG
+      WRITE( LOGDEV, *) XMSG
       
       ! Update Aerosol Surface Area
       CALL HETCHEM_UPDATE_AERO( CGRID )
