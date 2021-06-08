@@ -12,4 +12,4 @@ A state-of-the-art open-source CTM version of the Community Multiscale Air Quali
 + Numpy  
 
 ## Usage
-Replace 'BLD_CCTM_v521_intel_dl' with 'BLD_CCTM_v521_intel' in CMAQ, you may modify the path and a little bit of code as needed.
+Replace or add the files in 'BLD_CCTM_v521_intel_dl' with 'BLD_CCTM_v521_intel' in CMAQ, you may modify the path and a little bit of code as needed.
